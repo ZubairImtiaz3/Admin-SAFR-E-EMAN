@@ -8,6 +8,7 @@ import Checkbox from "@/components/ui/Checkbox";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import signIn from "@/components/firebase/auth/SignIn";
+import { ClipLoader } from "react-spinners";
 
 const schema = yup
   .object({
@@ -29,7 +30,11 @@ const LoginForm = () => {
 
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data) => {
+    setLoading(true);
+
     const { email, password } = data;
     const { result, error } = await signIn(email, password);
 
@@ -69,11 +74,8 @@ const LoginForm = () => {
         });
       }
     } else {
-      if (checked === true) {
-        console.log(checked);
-      }
       router.push("/");
-      toast.success("Logged In Successfully.", {
+      toast.success("Logged In Successfully!", {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -84,6 +86,7 @@ const LoginForm = () => {
         theme: "light",
       });
     }
+    setLoading(false);
   };
 
   const [checked, setChecked] = useState(false);
@@ -120,8 +123,18 @@ const LoginForm = () => {
         </Link>
       </div>
 
-      <button type="submit" className="btn btn-dark block w-full text-center">
-        Sign in
+      <button
+        disabled={loading}
+        type="submit"
+        className="btn btn-dark block w-full text-center"
+      >
+        {loading ? (
+          <span className="flex justify-center items-center gap-6">
+            Signing in... <ClipLoader size={18} color="#FFF" />
+          </span>
+        ) : (
+          "Sign in"
+        )}
       </button>
     </form>
   );

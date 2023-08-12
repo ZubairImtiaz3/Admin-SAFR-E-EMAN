@@ -28,7 +28,7 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user }}>
       {loading ? (
-        <div className="flex flex-col items-center justify-center app_height">
+        <div className="flex flex-col items-center justify-center h-[100vh] app_height">
           {/* <div className="mb-3">
             <img src="/assets/images/logo/logo.svg" alt="Logo" />
           </div> */}

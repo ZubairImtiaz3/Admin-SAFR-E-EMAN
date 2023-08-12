@@ -6,18 +6,17 @@ import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import Checkbox from "@/components/ui/Checkbox";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { handleLogin } from "./store";
 import { toast } from "react-toastify";
+import signIn from "@/components/firebase/auth/SignIn";
+
 const schema = yup
   .object({
     email: yup.string().email("Invalid email").required("Email is Required"),
     password: yup.string().required("Password is Required"),
   })
   .required();
+
 const LoginForm = () => {
-  const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.auth);
   const {
     register,
     formState: { errors },
@@ -27,18 +26,54 @@ const LoginForm = () => {
     //
     mode: "all",
   });
+
   const router = useRouter();
-  const onSubmit = (data) => {
-    const user = users.find(
-      (user) => user.email === data.email && user.password === data.password
-    );
-    if (user) {
-      dispatch(handleLogin(true));
-      setTimeout(() => {
-        router.push("/analytics");
-      }, 1500);
+
+  const onSubmit = async (data) => {
+    const { email, password } = data;
+    const { result, error } = await signIn(email, password);
+
+    if (error) {
+      if (error.code === "auth/user-not-found") {
+        toast.error("Invalid Email", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else if (error.code === "auth/wrong-password") {
+        toast.error("Invalid Password", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error("Something Wrong, Try again.", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     } else {
-      toast.error("Invalid credentials", {
+      if (checked === true) {
+        console.log(checked);
+      }
+      router.push("/");
+      toast.success("Logged In Successfully.", {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -85,7 +120,9 @@ const LoginForm = () => {
         </Link>
       </div>
 
-      <button className="btn btn-dark block w-full text-center">Sign in</button>
+      <button type="submit" className="btn btn-dark block w-full text-center">
+        Sign in
+      </button>
     </form>
   );
 };

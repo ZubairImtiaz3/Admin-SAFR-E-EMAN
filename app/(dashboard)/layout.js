@@ -24,6 +24,8 @@ import Loading from "@/components/Loading";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import useNavbarType from "@/hooks/useNavbarType";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuthContext } from "@/components/firebase/guard/AuthContext";
+
 export default function RootLayout({ children }) {
   const { width, breakpoints } = useWidth();
   const [collapsed] = useSidebar();
@@ -52,6 +54,12 @@ export default function RootLayout({ children }) {
   const [menuHidden] = useMenuHidden();
   // mobile menu
   const [mobileMenu, setMobileMenu] = useMobileMenu();
+
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    if (user == null) router.push("/login");
+  }, [user]);
 
   return (
     <div

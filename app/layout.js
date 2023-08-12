@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "./scss/app.scss";
 import { Provider } from "react-redux";
 import store from "../store";
+import { AuthContextProvider } from "@/components/firebase/guard/AuthContext";
 
 export default function RootLayout({ children }) {
   return (
@@ -16,7 +17,9 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className="font-inter  custom-tippy dashcode-app">
           <ToastContainer />
-          <Provider store={store}>{children}</Provider>
+          <AuthContextProvider>
+            <Provider store={store}>{children}</Provider>
+          </AuthContextProvider>
         </body>
       </html>
     </>

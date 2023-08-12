@@ -2,11 +2,23 @@
 import Link from "next/link";
 import LoginForm from "@/components/partials/auth/login-form";
 import useDarkMode from "@/hooks/useDarkMode";
-
-// image import
+import { authenticateWithGoogle } from "@/components/firebase/auth/GoogleAuth";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [isDark] = useDarkMode();
+  const router = useRouter();
+
+  // Handle the Google Sign-In click event
+  const handleGoogleSignIn = async () => {
+    try {
+      await authenticateWithGoogle();
+      router.push("/");
+    } catch (error) {
+      console.error("Google Sign-In error:", error);
+    }
+  };
+
   return (
     <>
       <div className="loginwrapper">
@@ -43,12 +55,12 @@ const Login = () => {
                 </div>
                 <div className="max-w-[242px] mx-auto mt-4 w-full">
                   <div className="flex justify-center">
-                    <a
-                      href="#"
+                    <button
+                      onClick={handleGoogleSignIn}
                       className="inline-flex h-10 w-10 bg-[#efbd69] text-white text-2xl flex-col items-center justify-center rounded-full"
                     >
                       <img src="/assets/images/icon/gp.svg" alt="" />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

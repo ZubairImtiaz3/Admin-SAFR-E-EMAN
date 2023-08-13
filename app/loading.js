@@ -5,8 +5,8 @@ import useDarkMode from "@/hooks/useDarkMode";
 const Loading = () => {
   const [isDark] = useDarkMode();
   return (
-    <div className="flex flex-col items-center justify-center app_height">
-      <div className="mb-3">
+    <div className="flex flex-col items-center justify-center h-[100vh] app_height">
+      {/* <div className="mb-3">
         <img
           src={
             isDark
@@ -15,7 +15,7 @@ const Loading = () => {
           }
           alt="Logo"
         />
-      </div>
+      </div> */}
 
       <svg
         className="animate-spin ltr:-ml-1 ltr:mr-3 rtl:-mr-1 rtl:ml-3 

@@ -11,6 +11,7 @@ export const useAuthContext = () => React.useContext(AuthContext);
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [authChecked, setAuthChecked] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -20,6 +21,7 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
       }
       setLoading(false);
+      setAuthChecked(true);
     });
 
     return () => unsubscribe();
@@ -27,7 +29,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user }}>
-      {loading ? (
+      {!authChecked || loading ? (
         <div className="flex flex-col items-center justify-center h-[100vh] app_height">
           {/* <div className="mb-3">
             <img src="/assets/images/logo/logo.svg" alt="Logo" />

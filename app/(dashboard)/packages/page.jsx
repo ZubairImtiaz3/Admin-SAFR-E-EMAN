@@ -1,12 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Card from "@/components/ui/Card";
 import Textinput from "@/components/ui/Textinput";
 import Textarea from "@/components/ui/Textarea";
+import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 import { useQuery } from "react-query";
-import { fetchDocuments } from "@/components/firebase/store/Crud";
+import {
+  fetchDocuments,
+  updateDocument,
+} from "@/components/firebase/store/Crud";
 
 function page() {
+  const [loading, setLoading] = useState(false);
+
+  // Store updated values in a state
+  const [updatedData, setUpdatedData] = useState({});
+
   const { data, error } = useQuery(
     "packages",
     () => fetchDocuments("/Packages", "features"),
@@ -14,6 +24,49 @@ function page() {
       suspense: true,
     }
   );
+
+  const handleInputChange = (id, key, value) => {
+    setUpdatedData((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [key]: value,
+      },
+    }));
+  };
+
+  const handleUpdateClick = async (id) => {
+    setLoading(id);
+    try {
+      if (updatedData[id]) {
+        await updateDocument("/Packages", id, updatedData[id]);
+        toast.success("Update Successfully!", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating document:", error);
+      toast.error("Error Updating, Try agian!", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
+    setLoading(null);
+  };
 
   return (
     <>
@@ -29,6 +82,9 @@ function page() {
                     type="text"
                     defaultValue={pkg.pkgPrice}
                     placeholder="Enter package price"
+                    onChange={(e) =>
+                      handleInputChange(pkg.id, "pkgPrice", e.target.value)
+                    }
                   />
                   <Textarea
                     className="h-28"
@@ -36,6 +92,9 @@ function page() {
                     id={`desc-${pkg.id}`}
                     dvalue={pkg.description}
                     placeholder="Enter package description"
+                    onChange={(e) =>
+                      handleInputChange(pkg.id, "description", e.target.value)
+                    }
                   />
                   <Textarea
                     className="h-28"
@@ -46,10 +105,22 @@ function page() {
                       pkg.features && Object?.values(pkg.features[0]).join(", ")
                     }
                     placeholder="Enter package features"
+                    onChange={(e) =>
+                      handleInputChange(pkg.id, "features", e.target.value)
+                    }
                   />
                 </div>
-                <button className="btn btn-dark px-5 py-2.5 text-sm mt-6">
-                  Update
+                <button
+                  onClick={() => handleUpdateClick(pkg.id)}
+                  className="btn btn-dark px-5 py-2.5 text-sm mt-6"
+                >
+                  {pkg.id === loading ? (
+                    <span className="flex justify-center items-center gap-3">
+                      Updating... <ClipLoader size={17} color="#FFF" />
+                    </span>
+                  ) : (
+                    "Update"
+                  )}
                 </button>
               </Card>
             </div>

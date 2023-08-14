@@ -10,6 +10,9 @@ import "./scss/app.scss";
 import { Provider } from "react-redux";
 import store from "../store";
 import { AuthContextProvider } from "@/components/firebase/guard/AuthContext";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({ children }) {
   return (
@@ -17,9 +20,11 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className="font-inter  custom-tippy dashcode-app">
           <ToastContainer />
-          <AuthContextProvider>
-            <Provider store={store}>{children}</Provider>
-          </AuthContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthContextProvider>
+              <Provider store={store}>{children}</Provider>
+            </AuthContextProvider>
+          </QueryClientProvider>
         </body>
       </html>
     </>

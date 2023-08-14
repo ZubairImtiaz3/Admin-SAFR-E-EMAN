@@ -1,9 +1,9 @@
 export const menuItems = [
   {
-    title: "Starter page",
+    title: "Umarah Packages",
     isHide: true,
-    icon: "heroicons:document-minus",
-    link: "analytics",
+    icon: "mdi:airplane",
+    link: "packages",
   },
 ];
 

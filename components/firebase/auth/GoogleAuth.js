@@ -40,6 +40,16 @@ export const authenticateWithGoogle = () => {
         const token = credential.accessToken;
 
         resolve(); // Resolve promise for successful login
+         toast.success("Logged In Successfully!", {
+           position: "top-right",
+           autoClose: 1500,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "light",
+         });
       })
       .catch((error) => {
         reject(error); // Reject promise for unsuccessful login

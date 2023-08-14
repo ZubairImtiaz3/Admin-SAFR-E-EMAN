@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Header from "@/components/partials/header";
 import Sidebar from "@/components/partials/sidebar";
 import Settings from "@/components/partials/settings";
@@ -56,15 +57,17 @@ export default function RootLayout({ children }) {
   // mobile menu
   const [mobileMenu, setMobileMenu] = useMobileMenu();
 
-  const { user } = useAuthContext();
+  const { user, authInitialized } = useAuthContext();
 
   useEffect(() => {
-    if (user === null) {
-      router.push("/login");
-    } else {
-      setLoading(false);
+    if (authInitialized) {
+      if (user === null) {
+        router.push("/login");
+      } else {
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, [user, authInitialized]);
 
   if (loading)
     return (
@@ -126,7 +129,6 @@ export default function RootLayout({ children }) {
           onClick={() => setMobileMenu(false)}
         ></div>
       )}
-      <Settings />
       <div
         className={`content-wrapper transition-all duration-150 ${
           width > 1280 ? switchHeaderClass() : ""
@@ -164,10 +166,7 @@ export default function RootLayout({ children }) {
                 duration: 0.5,
               }}
             >
-              <Suspense fallback={<Loading />}>
-                <Breadcrumbs />
-                {children}
-              </Suspense>
+              <Suspense fallback={<Loading />}>{children}</Suspense>
             </motion.div>
           </div>
         </div>

@@ -16,32 +16,15 @@ export const addDocument = async (collectionPath, data) => {
   return docRef.id;
 };
 
-// READ: Fetch documents from a collection and show its sub collection as well
-export const fetchDocuments = async (collectionPath, subCollectionName) => {
+// READ: Fetch documents from a collection
+export const fetchDocuments = async (collectionPath) => {
   const docCollection = collection(db, collectionPath);
   const snapshot = await getDocs(docCollection);
 
-  const withSubcollectionsPromises = snapshot.docs.map(async (mainDoc) => {
-    const mainData = mainDoc.data();
-
-    const subCollectionRef = collection(
-      doc(db, collectionPath, mainDoc.id),
-      subCollectionName
-    );
-    const subSnapshot = await getDocs(subCollectionRef);
-    const subData = subSnapshot.docs.map((subDoc) => subDoc.data());
-
-    return {
-      id: mainDoc.id,
-      ...mainData,
-      [subCollectionName]: subData, // Using the subCollectionName as the key
-    };
-  });
-
-  const allDataWithSubcollections = await Promise.all(
-    withSubcollectionsPromises
-  );
-  return allDataWithSubcollections;
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 };
 
 // UPDATE: Update a document by its ID

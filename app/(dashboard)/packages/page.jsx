@@ -19,24 +19,45 @@ function page() {
 
   const { data, error } = useQuery(
     "packages",
-    () => fetchDocuments("/Packages", "features"),
+    () => fetchDocuments("/Packages"),
     {
       suspense: true,
     }
   );
 
   const handleInputChange = (id, key, value) => {
+    let processedValue = value;
+
+    // Check if the key is "features" and process the value to an array
+    if (key === "features") {
+      processedValue = value.split(",").map((item) => item.trim());
+    }
+
     setUpdatedData((prev) => ({
       ...prev,
       [id]: {
         ...prev[id],
-        [key]: value,
+        [key]: processedValue,
       },
     }));
   };
 
   const handleUpdateClick = async (id) => {
     setLoading(id);
+
+    if (Object.keys(updatedData).length === 0) {
+      toast.error("Nothing To Update", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
     try {
       if (updatedData[id]) {
         await updateDocument("/Packages", id, updatedData[id]);
@@ -73,7 +94,7 @@ function page() {
       <div className="flex justify-center gap-8 flex-wrap">
         {data &&
           data.map((pkg) => (
-            <div className="flex-1" key={pkg.id}>
+            <div className="lg:flex-1" key={pkg.id}>
               <Card title={pkg.id}>
                 <div className="space-y-3">
                   <Textinput
@@ -101,9 +122,7 @@ function page() {
                     label="Pkg features*"
                     id={`features-${pkg.id}`}
                     type="text"
-                    dvalue={
-                      pkg.features && Object?.values(pkg.features[0]).join(", ")
-                    }
+                    dvalue={pkg.features && pkg.features.join(", ")}
                     placeholder="Enter package features"
                     onChange={(e) =>
                       handleInputChange(pkg.id, "features", e.target.value)

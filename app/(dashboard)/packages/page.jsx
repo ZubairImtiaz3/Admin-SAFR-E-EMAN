@@ -45,7 +45,7 @@ function page() {
   const handleUpdateClick = async (id) => {
     setLoading(id);
 
-    if (Object.keys(updatedData).length === 0) {
+    if (Object.keys(updatedData).length === 0 || !updatedData[id]) {
       toast.error("Nothing To Update", {
         position: "top-right",
         autoClose: 1500,
@@ -56,25 +56,32 @@ function page() {
         progress: undefined,
         theme: "light",
       });
+      setLoading(null);
+      return;
     }
 
     try {
-      if (updatedData[id]) {
-        await updateDocument("/Packages", id, updatedData[id]);
-        toast.success("Update Successfully!", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
+      await updateDocument("/Packages", id, updatedData[id]);
+      toast.success("Update Successfully!", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      // Clear the updated data for this package id after successful update
+      setUpdatedData((prev) => {
+        const newData = { ...prev };
+        delete newData[id];
+        return newData;
+      });
     } catch (error) {
       console.error("Error updating document:", error);
-      toast.error("Error Updating, Try agian!", {
+      toast.error("Error Updating, Try again!", {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -88,6 +95,7 @@ function page() {
 
     setLoading(null);
   };
+
 
   return (
     <>

@@ -35,7 +35,6 @@ function page() {
   );
 
   const handleModalUpdate = () => {
-    setModal(false);
     if (currentPackageId) {
       handleUpdateClick(currentPackageId);
     }
@@ -130,10 +129,10 @@ function page() {
     }
 
     setLoading(null);
+    setModal(false);
   };
 
   const handleSaveAllChanges = async () => {
-    setModal(false);
     if (Object.keys(updatedData).length === 0) {
       toast.error("Nothing To Update", {
         position: "top-right",
@@ -165,8 +164,6 @@ function page() {
         updateDocument("/Packages_Info", "title", updatePayload)
       );
     }
-
-    console.log(updatePayload);
 
     // Create an array of promises for the individual package updates
     Object.keys(updatedData).forEach((pkgId) => {
@@ -207,7 +204,8 @@ function page() {
       });
     }
 
-    setLoading(false); // End the loading state
+    setLoading(false);
+    setModal(false);
   };
 
   return (
@@ -241,7 +239,7 @@ function page() {
           data.map((pkg) => (
             <>
               <div className="lg:flex-1" key={pkg.id}>
-                <Card className="border-none" title={pkg.id}>
+                <Card className="border-none bg-white" title={pkg.id}>
                   <div className="space-y-3">
                     <Textinput
                       label="Package price*"
@@ -296,34 +294,44 @@ function page() {
                 onClose={() => setModal(false)}
                 title="Are you sure ?"
               >
-                <p className="font-semibold text-center">
-                  {actionType === "single"
-                    ? 'Clicking "Confirm" will update the selected Umrah package.'
-                    : 'Clicking "Confirm" will update all changes made.'}
-                </p>
-                <p className="font-semibold text-center mt-2">
-                  Do you want to proceed?
-                </p>
+                {loading ? (
+                  <div className="flex flex-col items-center space-y-3">
+                    <ClipLoader size={30} color="#333" />
+                    <p className="font-semibold text-center">
+                      Updating, please wait...
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="font-semibold text-center">
+                      {actionType === "single"
+                        ? 'Clicking "Confirm" will update the selected Umrah package.'
+                        : 'Clicking "Confirm" will update all changes made.'}
+                    </p>
+                    <p className="font-semibold text-center mt-2">
+                      Do you want to proceed?
+                    </p>
 
-                <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={() => setModal(false)}
-                    className="btn btn-dark px-5 py-2.5 text-sm mt-6"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    onClick={
-                      actionType === "single"
-                        ? handleModalUpdate
-                        : handleSaveAllChanges
-                    }
-                    className="btn btn-dark px-5 py-2.5 text-sm mt-6"
-                  >
-                    Confirm
-                  </button>
-                </div>
+                    <div className="flex gap-4 justify-center">
+                      <button
+                        onClick={() => setModal(false)}
+                        className="btn btn-dark px-5 py-2.5 text-sm mt-6"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={
+                          actionType === "single"
+                            ? handleModalUpdate
+                            : handleSaveAllChanges
+                        }
+                        className="btn btn-dark px-5 py-2.5 text-sm mt-6"
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </>
+                )}
               </Modal>
             </>
           ))}

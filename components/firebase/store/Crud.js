@@ -29,9 +29,18 @@ export const fetchDocuments = async (collectionPath) => {
 
 // UPDATE: Update a document by its ID
 export const updateDocument = async (collectionPath, docId, data) => {
-  const documentRef = doc(db, collectionPath, docId);
-  await updateDoc(documentRef, data);
+  try {
+    const documentRef = doc(db, collectionPath, docId);
+    await updateDoc(documentRef, data);
+  } catch (error) {
+    console.error(
+      `Error updating document at ${collectionPath}/${docId}:`,
+      error
+    );
+    throw error;
+  }
 };
+
 
 // REPLACE: Set/replace data for a specific document (creates it if it doesn't exist)
 export const setDocument = async (collectionPath, docId, data) => {

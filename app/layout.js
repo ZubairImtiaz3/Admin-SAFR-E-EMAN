@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import store from "../store";
 import { AuthContextProvider } from "@/components/firebase/guard/AuthContext";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         <body className="font-inter  custom-tippy dashcode-app">
           <ToastContainer />
           <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
             <AuthContextProvider>
               <Provider store={store}>{children}</Provider>
             </AuthContextProvider>

@@ -162,7 +162,7 @@ function page() {
 
     if (Object.keys(updatePayload).length > 0) {
       updatePromises.push(
-        updateDocument("/Package_Info", "title", updatePayload)
+        updateDocument("/Packages_Info", "title", updatePayload)
       );
     }
 
@@ -213,7 +213,10 @@ function page() {
   return (
     <>
       <div className="mt-2 mb-8 px-8 flex justify-center gap-8 flex-wrap">
-        <Card className="md:flex-1 bg-white" title="Heading">
+        <Card
+          className="w-[16.5rem] md:w-auto md:flex-1 bg-white"
+          title="Heading"
+        >
           <Textarea
             className="h-20"
             id=""

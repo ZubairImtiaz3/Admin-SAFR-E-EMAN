@@ -38,14 +38,14 @@ const MobileMenu = ({ className = "custom-class" }) => {
           <div className="flex items-center space-x-4">
             <div className="logo-icon">
               {!isDark && !isSemiDark ? (
-                <img src="/assets/images/logo/logo-c.svg" alt="" />
+                <img src="/assets/images/logo/emanSvg.svg" alt="" />
               ) : (
-                <img src="/assets/images/logo/logo-c-white.svg" alt="" />
+                <img src="/assets/images/logo/emanSvg.svg" alt="" />
               )}
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                DashCode
+              <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                SAFR E IMAN
               </h1>
             </div>
           </div>

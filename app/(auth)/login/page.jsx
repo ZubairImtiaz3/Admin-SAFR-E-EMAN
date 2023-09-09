@@ -42,7 +42,7 @@ const Login = () => {
                 <div className="text-center 2xl:mb-10 mb-4">
                   <h4 className="font-medium">Sign in</h4>
                   <div className="text-[#5E5E5E] text-base">
-                    Sign in to your SAFR-E-EMAN admin account
+                    Sign in to your SAFR-E-IMAN admin account
                   </div>
                 </div>
                 <LoginForm />

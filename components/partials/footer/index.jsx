@@ -18,7 +18,7 @@ const Footer = ({ className = "custom-class" }) => {
       <div className="site-footer px-6 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 py-4">
         <div className="">
           <div className="text-center text-sm">
-            COPYRIGHT &copy; 2023 SAFR E IMAN, All rights Reserved
+            COPYRIGHT &copy; 2023 SAFR E EMAN, All rights Reserved
           </div>
         </div>
       </div>

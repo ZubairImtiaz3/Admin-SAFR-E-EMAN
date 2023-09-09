@@ -17,8 +17,8 @@ const Logo = () => {
             <img
               src={
                 isDark
-                  ? "/assets/images/logo/logo-white.svg"
-                  : "/assets/images/logo/logo.svg"
+                  ? "/assets/images/logo/emanSvg.svg"
+                  : "/assets/images/logo/emanSvg.svg"
               }
               alt=""
             />
@@ -26,8 +26,8 @@ const Logo = () => {
             <img
               src={
                 isDark
-                  ? "/assets/images/logo/logo-c-white.svg"
-                  : "/assets/images/logo/logo-c.svg"
+                  ? "/assets/images/logo/emanSvg.svg"
+                  : "/assets/images/logo/emanSvg.svg"
               }
               alt=""
             />

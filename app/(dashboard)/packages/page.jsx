@@ -214,7 +214,7 @@ function page() {
     <>
       <div className="mt-2 mb-8 px-8 flex justify-center gap-8 flex-wrap">
         <Card
-          className="w-[16.5rem] md:w-auto md:flex-1 bg-white"
+          className="w-[16.5rem] md:w-auto md:flex-1 bg-white border-none"
           title="Heading"
         >
           <Textarea
@@ -226,7 +226,7 @@ function page() {
             onChange={(e) => handleInputChange(null, "heading", e.target.value)}
           />
         </Card>
-        <Card className="md:flex-1 bg-white" title="Year">
+        <Card className="md:flex-1 bg-white border-none" title="Year">
           <Textinput
             type="number"
             id=""
@@ -241,7 +241,7 @@ function page() {
           data.map((pkg) => (
             <>
               <div className="lg:flex-1" key={pkg.id}>
-                <Card title={pkg.id}>
+                <Card className="border-none" title={pkg.id}>
                   <div className="space-y-3">
                     <Textinput
                       label="Package price*"
